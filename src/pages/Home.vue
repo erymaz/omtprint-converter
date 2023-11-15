@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard mx-auto py-24 text-white">
-    <h2 class="font-bold text-white text-3xl">Convert Catalogs</h2>
+    <h2 class="font-bold text-white text-3xl">Convert Categories</h2>
     <div class="flex items-center w-60 my-4">
       <input
         v-model="state.webstore"
@@ -27,11 +27,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
-import { useToast } from 'vue-toastification'
+import { reactive, ref } from 'vue'
+// import { useToast } from 'vue-toastification'
 import JdsIndustries from '@/components/JdsIndustries.vue';
 
-const toast = useToast()
+// const toast = useToast()
 
 const vendors = ref([
   {

@@ -14,10 +14,10 @@ const JdsIndexMap: Record<number, number | string> = {
   9: -1,    // Color 2 Name -
   10: 14,   // Todo: Color 1 Hex Value (Required) - 
   11: -1,   // Color 2 Hex Value -
-  12: -1,   // Todo: Supplier Name (Required) -
-  13: -1,   // Todo: Manufacturer Name (Required) -
-  14: 6,    // Todo: Customer Price (Required) - PRICE BANK 1
-  15: 6,    // Todo: Product Cost (Required) -
+  12: 'JDS',   // Supplier Name (Required) -
+  13: 'JDS',   // Manufacturer Name (Required) -
+  14: -1,   // Customer Price (Required) -
+  15: 5,    // Product Cost (Required) - LESS THAN CASE PRICE
   16: -1,   // GTIN/UPC Code
   17: -1,   // Search Tags
   18: 13,   // Front Image - IMAGE
@@ -40,13 +40,19 @@ export const mapJdsToInksoft = (store: string, JDSList: any[]) => {
         converted.push(store)
       } else if (j === 10) {
         // Todo: Color Hex value
-        const mappingIdx = JdsIndexMap[j];
-        converted.push(productInfo[mappingIdx])
+        // const mappingIdx = JdsIndexMap[j];
+        converted.push('#FFFFFF')
+      } else if (j === 12 || j === 13) {
+        // Supplier, Manufacturer Name
+        converted.push('JDS')
+      } else if (j === 14) {
+        // Customer Price
+        converted.push(0)
       } else if (j === 18) {
         // Image
         const mappingIdx = JdsIndexMap[j];
         if (!productInfo[mappingIdx]) {
-          converted.push('')
+          converted.push('unknown')
         } else {
           converted.push(`${JDS_INDUSTRIES_IMAGE_URL}/${productInfo[mappingIdx]}`)
         }
