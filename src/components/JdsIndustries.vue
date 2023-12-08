@@ -28,12 +28,22 @@
               @click="clear"
             />
           </div>
-          <div class="flex items-center mt-4 space-x-2">
+          <div class="flex flex-col md:flex-row items-center mt-4 space-x-2">
             <input
+              v-model="state.catalog"
+              class="h-9 w-96 bg-white bg-opacity-5 rounded text-white px-2 focus:ring-none focus:outline-none"
+              placeholder="Catalog (class)"
+            />
+            <input
+              v-model="state.query"
+              class="h-9 w-full bg-white bg-opacity-5 rounded text-white px-2 focus:ring-none focus:outline-none"
+              placeholder="Query"
+            />
+            <!-- <input
               v-model="state.skus"
               class="h-9 w-full bg-white bg-opacity-5 rounded text-white px-2 focus:ring-none focus:outline-none"
               placeholder="Items (distinguish by comma)"
-            />
+            /> -->
             <button
               class="h-9 relative inline-flex items-center rounded-md bg-white bg-opacity-5 px-3 text-sm font-semibold text-white hover:bg-gray-800 focus-visible:outline-offset-0"
               @click="filter">
@@ -123,7 +133,7 @@ import { useToast } from 'vue-toastification'
 import { DocumentIcon, DocumentRemoveIcon } from '@heroicons/vue/solid'
 import Pagination from '@/components/Pagination.vue'
 import { JDS_INDUSTRIES_IMAGE_URL } from '@/constants'
-import { downloadCSVFile, InkSoftTemplateHeaders, mapJdsToInksoft } from '@/helpers'
+import { downloadCSVFile, InkSoftTemplateHeaders, mapJdsToInksoft, requiredFieldIds } from '@/helpers'
 
 const toast = useToast()
 
@@ -144,7 +154,9 @@ const state = reactive({
   filteredList: [] as any[],
   selectedItems: [] as any[],
   selectAll: false,
-  skus: ''
+  catalog: '',
+  skus: '',
+  query: ''
 })
 
 const tableData = computed(() => {
@@ -162,12 +174,26 @@ const updatePage = (value: number) => {
 }
 
 const filter = () => {
-  if (!state.skus) {
+  if (!state.catalog && !state.skus && !state.query) {
     state.filteredList = state.list
     return
   }
-  const skus = state.skus.split(',').map(_ => _.trim().toLowerCase())
-  state.filteredList = state.list.filter(data => skus.includes(data[1]?.trim().toLowerCase()) || false)
+  let _filtered = state.list.slice()
+  if (state.catalog) {
+    _filtered = _filtered.filter(data => data[0] === state.catalog)
+  }
+  if (state.skus) {
+    const skus = state.skus.split(',').map(_ => _.trim().toLowerCase())
+    _filtered = _filtered.filter(data => skus.includes(data[1]?.trim().toLowerCase()) || false)
+  }
+  if (state.query) {
+    _filtered = _filtered.filter(data =>
+      data[21]?.toLowerCase().includes(state.query.toLowerCase()) ||
+      data[22]?.toLowerCase().includes(state.query.toLowerCase()) ||
+      data[23]?.toLowerCase().includes(state.query.toLowerCase())
+    )
+  }
+  state.filteredList = _filtered
   state.page = 1
 }
 
@@ -184,7 +210,7 @@ const getData = (dataString: string) => {
   const list = []
   for (let i = 0; i < dataStringLines.length; i++) {
       const row = dataStringLines[i].split(/,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/)
-      let item = []
+      const item: string[] = []
       for (let j = 0; j < row.length; j++) {
           let d = row[j]
           if (d.length > 0) {
@@ -202,7 +228,17 @@ const getData = (dataString: string) => {
         if (i === 0) {
           state.header = item
         } else {
-          list.push(item)
+          // check if has all required fields
+          let validRow = true
+          for (const idx of requiredFieldIds) {
+            if (!item[idx]) {
+              validRow = false
+              break
+            }
+          }
+          if (validRow) {
+            list.push(item)
+          }
         }
       }
   }
@@ -266,7 +302,9 @@ const clear = () => {
   state.isLoading = false
   state.page = 1
   state.filteredList = []
+  state.catalog = ''
   state.skus = ''
+  state.query = ''
   state.selectAll = false
   state.selectedItems = []
 }

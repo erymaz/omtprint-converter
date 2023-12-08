@@ -1,11 +1,13 @@
 import { InkSoftTemplateHeaders } from '.'
 import { JDS_INDUSTRIES_IMAGE_URL } from '@/constants'
 
+export const requiredFieldIds = [2, 23, 1, 15, 11, 5]
+
 // InkSoftIdx: JSDIdx
 const JdsIndexMap: Record<number, number | string> = {
   1: 0,     // Category(s) - CLASS
   2: 2,     // Product Name (Required) - DESCRIPTION 1
-  3: 22,    // Product Description (Required) - SHORT DESCRIPTION
+  3: 23,    // Product Description (Required) - LONG DESCRIPTION
   4: 1,     // SKU/Item Number (Required) - ITEM
   5: 1,     // MFG Sku (Required) - ITEM
   6: 15,    // Size (Required) - SIZE
@@ -14,8 +16,8 @@ const JdsIndexMap: Record<number, number | string> = {
   9: -1,    // Color 2 Name -
   10: 14,   // Todo: Color 1 Hex Value (Required) - 
   11: -1,   // Color 2 Hex Value -
-  12: 'JDS',   // Supplier Name (Required) -
-  13: 'JDS',   // Manufacturer Name (Required) -
+  12: -1,   // Supplier Name (Required) -
+  13: -1,   // Manufacturer Name (Required) -
   14: -1,   // Customer Price (Required) -
   15: 5,    // Product Cost (Required) - LESS THAN CASE PRICE
   16: -1,   // GTIN/UPC Code
@@ -29,7 +31,7 @@ const JdsIndexMap: Record<number, number | string> = {
   24: -1,   // Minimum Per Order
 }
 
-export const mapJdsToInksoft = (store: string, JDSList: any[]) => {
+export const mapJdsToInksoft = (store: string, JDSList: any[]): any[] => {
   const inkSoftList = []
   for (let i = 0; i < JDSList.length; i++) {
     const productInfo = JDSList[i]
