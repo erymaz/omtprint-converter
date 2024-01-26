@@ -1,4 +1,5 @@
 export * from './jdsIndustries.helper'
+export * from './pcna.helper'
 
 export const jsonToCsv = (rows: any[]): string => {
   let fileParsed = ''
@@ -26,7 +27,7 @@ export const arrayToCsv = (rows: any[]): string => {
   return fileParsed
 }
 
-export const downloadCSVFile = (header: string[], list: any[]) => {
+export const downloadCSVFile = (header: string[], list: (string | number)[][]): void => {
   const fileParsed = arrayToCsv([
     header,
     ...list

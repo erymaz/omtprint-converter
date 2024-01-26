@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard mx-auto py-24 text-white">
-    <h2 class="font-bold text-white text-3xl">Convert Categories</h2>
+    <h2 class="font-bold text-white text-3xl">Convert Catalogs</h2>
     <div class="flex items-center w-60 my-4">
       <input
         v-model="state.webstore"
@@ -23,6 +23,7 @@
     </div>
 
     <JdsIndustries v-if="state.selectedVendor === 'jds_industries'" :webstore="state.webstore" />
+    <Pcna v-else-if="state.selectedVendor === 'pcna'" :webstore="state.webstore" />
   </div>
 </template>
 
@@ -30,6 +31,7 @@
 import { reactive, ref } from 'vue'
 // import { useToast } from 'vue-toastification'
 import JdsIndustries from '@/components/JdsIndustries.vue';
+import Pcna from '@/components/Pcna.vue';
 
 // const toast = useToast()
 
@@ -37,6 +39,10 @@ const vendors = ref([
   {
     id: 'jds_industries',
     name: 'JDS Industries'
+  },
+  {
+    id: 'pcna',
+    name: 'PCNA'
   }
 ])
 

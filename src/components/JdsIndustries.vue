@@ -133,7 +133,7 @@ import { useToast } from 'vue-toastification'
 import { DocumentIcon, DocumentRemoveIcon } from '@heroicons/vue/solid'
 import Pagination from '@/components/Pagination.vue'
 import { JDS_INDUSTRIES_IMAGE_URL } from '@/constants'
-import { downloadCSVFile, InkSoftTemplateHeaders, mapJdsToInksoft, requiredFieldIds } from '@/helpers'
+import { downloadCSVFile, InkSoftTemplateHeaders, mapJdsToInksoft, jdsRequiredFieldIds } from '@/helpers'
 
 const toast = useToast()
 
@@ -230,7 +230,7 @@ const getData = (dataString: string) => {
         } else {
           // check if has all required fields
           let validRow = true
-          for (const idx of requiredFieldIds) {
+          for (const idx of jdsRequiredFieldIds) {
             if (!item[idx]) {
               validRow = false
               break

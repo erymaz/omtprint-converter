@@ -1,7 +1,7 @@
 import { InkSoftTemplateHeaders } from '.'
 import { JDS_INDUSTRIES_IMAGE_URL } from '@/constants'
 
-export const requiredFieldIds = [2, 23, 1, 15, 11, 5]
+export const jdsRequiredFieldIds = [2, 23, 1, 15, 11, 5]
 
 // InkSoftIdx: JSDIdx
 const JdsIndexMap: Record<number, number | string> = {
